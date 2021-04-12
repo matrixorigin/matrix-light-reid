@@ -3,6 +3,7 @@ from mmcv.utils import Registry, build_from_cfg
 
 BACKBONES = Registry('backbone')
 CLASSIFIERS = Registry('classifier')
+REIDS = Registry('reid')
 HEADS = Registry('head')
 NECKS = Registry('neck')
 LOSSES = Registry('loss')
@@ -35,4 +36,7 @@ def build_loss(cfg):
 
 
 def build_classifier(cfg):
+    return build(cfg, CLASSIFIERS)
+
+def build_reid(cfg):
     return build(cfg, CLASSIFIERS)
