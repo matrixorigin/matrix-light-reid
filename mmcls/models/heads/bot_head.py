@@ -21,16 +21,9 @@ class BotHead(BaseHead):
                  loss_ce=dict(type='CrossEntropyLoss', loss_weight=1.0),
                  loss_tri=dict(type='TripletLoss', loss_weight=1.0, margin=0.3, norm_feat=False),
                  bn_neck = True,
-                 topk=(1, )):
+                 ):
         super(BotHead, self).__init__()
 
-        assert isinstance(loss, dict)
-        assert isinstance(topk, (int, tuple))
-        if isinstance(topk, int):
-            topk = (topk, )
-        for _topk in topk:
-            assert _topk > 0, 'Top-k should be larger than 0'
-        self.topk = topk
         self.pool_layer = nn.AdaptiveAvgPool2d(output_size=1)
         neck = []
         feat_dim = in_channels
@@ -52,8 +45,8 @@ class BotHead(BaseHead):
         if loss_tri is not None:
             self.loss_tri = build_loss(loss_tri)
 
-        self.compute_loss = build_loss(loss)
-        self.compute_accuracy = Accuracy(topk=self.topk)
+        #self.compute_loss = build_loss(loss)
+        #self.compute_accuracy = Accuracy(topk=self.topk)
 
     def extract_feats(self, x):
         x = self.pool_layer(x)
