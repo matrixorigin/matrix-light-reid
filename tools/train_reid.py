@@ -18,8 +18,7 @@ from mmcls.utils import collect_env, get_root_logger
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a model')
-    parser.add_argument('config1', help='train cls config file path')
-    parser.add_argument('config2', help='train reid config file path')
+    parser.add_argument('config', help='train reid config file path')
     parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
         '--resume-from', help='the checkpoint file to resume from')
@@ -62,8 +61,7 @@ def parse_args():
 def main():
     args = parse_args()
 
-    cfg_cls = Config.fromfile(args.config1)
-    cfg_reid = Config.fromfile(args.config2)
+    cfg = Config.fromfile(args.config)
     if args.options is not None:
         cfg.merge_from_dict(args.options)
     # set cudnn_benchmark
@@ -139,12 +137,14 @@ def main():
             config=cfg.pretty_text,
             CLASSES=datasets[0].CLASSES)
     # add an attribute for visualization convenience
+    validate = not args.no_validate
+    validate = False
     train_model(
         model,
         datasets,
         cfg,
         distributed=distributed,
-        validate=(not args.no_validate),
+        validate=validate,
         timestamp=timestamp,
         meta=meta)
 

@@ -1,4 +1,5 @@
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
 
 from mmcls.models.losses import Accuracy
@@ -24,7 +25,6 @@ class BotHead(BaseHead):
                  ):
         super(BotHead, self).__init__()
 
-        self.pool_layer = nn.AdaptiveAvgPool2d(output_size=1)
         neck = []
         feat_dim = in_channels
         if embedding_dim > 0:
@@ -49,7 +49,6 @@ class BotHead(BaseHead):
         #self.compute_accuracy = Accuracy(topk=self.topk)
 
     def extract_feats(self, x):
-        x = self.pool_layer(x)
         xbn = self.neck(x)
         return (x, xbn)
 
@@ -78,4 +77,5 @@ class BotHead(BaseHead):
     def simple_test(self, x):
         feats = self.extract_feats(x)
         feat = feats[-1]
+        feat = list(feat.detach().cpu().numpy())
         return feat

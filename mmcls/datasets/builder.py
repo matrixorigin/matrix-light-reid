@@ -40,8 +40,7 @@ def build_dataset(cfg, default_args=None):
 
 
 def build_dataloader(dataset,
-                     samples_per_gpu,
-                     workers_per_gpu,
+                     data_cfg,
                      num_gpus=1,
                      dist=True,
                      shuffle=True,
@@ -70,8 +69,15 @@ def build_dataloader(dataset,
     Returns:
         DataLoader: A PyTorch dataloader.
     """
+    samples_per_gpu = data_cfg.samples_per_gpu
+    workers_per_gpu = data_cfg.workers_per_gpu
     rank, world_size = get_dist_info()
-    if dist:
+    if data_cfg.triplet_sampler:
+        sampler = NaiveIdentitySampler(train_set.img_items, mini_batch_size, num_instance)
+        batch_sampler = torch.utils.data.sampler.BatchSampler(sampler, mini_batch_size, True)
+        batch_size = samples_per_gpu
+        num_workers = workers_per_gpu
+    elif dist:
         sampler = DistributedSampler(
             dataset, world_size, rank, shuffle=shuffle, round_up=round_up)
         shuffle = False
