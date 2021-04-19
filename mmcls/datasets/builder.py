@@ -6,9 +6,10 @@ import numpy as np
 from mmcv.parallel import collate
 from mmcv.runner import get_dist_info
 from mmcv.utils import Registry, build_from_cfg
+import torch
 from torch.utils.data import DataLoader
 
-from .samplers import DistributedSampler
+from .samplers import DistributedSampler,NaiveIdentitySampler
 
 if platform.system() != 'Windows':
     # https://github.com/pytorch/pytorch/issues/973
@@ -73,10 +74,16 @@ def build_dataloader(dataset,
     workers_per_gpu = data_cfg.workers_per_gpu
     rank, world_size = get_dist_info()
     if data_cfg.triplet_sampler:
-        sampler = NaiveIdentitySampler(train_set.img_items, mini_batch_size, num_instance)
-        batch_sampler = torch.utils.data.sampler.BatchSampler(sampler, mini_batch_size, True)
+        assert dist
+        num_instance = 4
+        assert samples_per_gpu%num_instance==0
+        triplet_seed = 772299
+        sampler = NaiveIdentitySampler(dataset.samples, samples_per_gpu, num_instance, rank, world_size, triplet_seed)
+        batch_sampler = torch.utils.data.sampler.BatchSampler(sampler, samples_per_gpu, True)
+        #batch_sampler = torch.utils.data.sampler.BatchSampler(sampler, samples_per_gpu*world_size, True)
         batch_size = samples_per_gpu
         num_workers = workers_per_gpu
+        shuffle = False
     elif dist:
         sampler = DistributedSampler(
             dataset, world_size, rank, shuffle=shuffle, round_up=round_up)
@@ -92,16 +99,28 @@ def build_dataloader(dataset,
         worker_init_fn, num_workers=num_workers, rank=rank,
         seed=seed) if seed is not None else None
 
-    data_loader = DataLoader(
-        dataset,
-        batch_size=batch_size,
-        sampler=sampler,
-        num_workers=num_workers,
-        collate_fn=partial(collate, samples_per_gpu=samples_per_gpu),
-        pin_memory=False,
-        shuffle=shuffle,
-        worker_init_fn=init_fn,
-        **kwargs)
+    if data_cfg.triplet_sampler:
+        data_loader = DataLoader(
+            dataset,
+            #batch_size=batch_size,
+            batch_sampler=batch_sampler,
+            num_workers=num_workers,
+            collate_fn=partial(collate, samples_per_gpu=samples_per_gpu),
+            pin_memory=False,
+            #shuffle=shuffle,
+            #worker_init_fn=init_fn,
+            **kwargs)
+    else:
+        data_loader = DataLoader(
+            dataset,
+            batch_size=batch_size,
+            sampler=sampler,
+            num_workers=num_workers,
+            collate_fn=partial(collate, samples_per_gpu=samples_per_gpu),
+            pin_memory=False,
+            shuffle=shuffle,
+            worker_init_fn=init_fn,
+            **kwargs)
 
     return data_loader
 

@@ -22,7 +22,7 @@ test_pipeline = [
 data = dict(
     samples_per_gpu=32,
     workers_per_gpu=2,
-    triplet_sampler=False,
+    triplet_sampler=True,
     train=dict(
         type=dataset_type,
         data_prefix='data/Market-1501-v15.09.15/bounding_box_train',
@@ -52,12 +52,13 @@ model = dict(
         type='BotHead',
         in_channels=2048,
         loss_ce=dict(type='CrossEntropyLoss', loss_weight=1.0),
-        loss_tri=None,
+        loss_tri=dict(type='TripletLoss', loss_weight=1.0, margin=0.3, norm_feat=False),
+        #loss_tri=None,
     ))
 
 #optimizer = dict(type='SGD', lr=0.1, momentum=0.9, weight_decay=0.0001)
 #optimizer = dict(type='Adam', lr=0.0003, momentum=0.9, weight_decay=0.0005)
-optimizer = dict(type='Adam', lr=0.0003)
+optimizer = dict(type='Adam', lr=0.00035)
 optimizer_config = dict(grad_clip=None)
 # learning policy
 lr_config = dict(policy='step', step=[40, 90])

@@ -153,7 +153,6 @@ class TripletLoss(nn.Module):
         assert reduction_override in (None, 'none', 'mean', 'sum')
         reduction = (
             reduction_override if reduction_override else self.reduction)
-        loss = self.loss_weight * triplet_loss(
-            embedding,
-            label)
+        loss = self.loss_weight * triplet_loss(embedding, label, self.margin, self.norm_feat, self.hard_mining)
         return loss
+
