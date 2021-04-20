@@ -41,7 +41,8 @@ def build_dataset(cfg, default_args=None):
 
 
 def build_dataloader(dataset,
-                     data_cfg,
+                     samples_per_gpu,
+                     workers_per_gpu,
                      num_gpus=1,
                      dist=True,
                      shuffle=True,
@@ -70,10 +71,8 @@ def build_dataloader(dataset,
     Returns:
         DataLoader: A PyTorch dataloader.
     """
-    samples_per_gpu = data_cfg.samples_per_gpu
-    workers_per_gpu = data_cfg.workers_per_gpu
     rank, world_size = get_dist_info()
-    if data_cfg.triplet_sampler:
+    if dataset.triplet_sampler:
         assert dist
         num_instance = 4
         assert samples_per_gpu%num_instance==0
@@ -99,7 +98,7 @@ def build_dataloader(dataset,
         worker_init_fn, num_workers=num_workers, rank=rank,
         seed=seed) if seed is not None else None
 
-    if data_cfg.triplet_sampler:
+    if dataset.triplet_sampler:
         data_loader = DataLoader(
             dataset,
             #batch_size=batch_size,
