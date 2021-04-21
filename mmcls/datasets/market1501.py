@@ -182,7 +182,7 @@ class Market1501(BaseDataset):
         gt_labels = self.get_gt_labels()
         cams = np.array([data['cid'] for data in self.data_infos])
         num_imgs = len(results)
-        print('XXXX', results.shape, gt_labels.shape, num_imgs)
+        #print('XXXX', results.shape, gt_labels.shape, num_imgs)
         assert len(gt_labels) == num_imgs, 'dataset testing results should '\
             'be of the same length as gt_labels.'
         assert (self.test_size+self.query_size) == num_imgs, 'dataset testing results should '\

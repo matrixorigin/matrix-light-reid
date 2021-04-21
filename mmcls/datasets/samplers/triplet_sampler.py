@@ -155,7 +155,7 @@ class NaiveIdentitySampler(Sampler):
         self._len = len(self.data_source)
         #self._num_batches = self._len // self.batch_size
         self._num_batches = self._len // mini_batch_size
-        print('NNN:', self._len, self.batch_size, self._num_batches)
+        #print('NNN:', self._len, self.batch_size, self._num_batches)
 
     def __iter__(self):
         start = self._rank
