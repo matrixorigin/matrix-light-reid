@@ -106,6 +106,8 @@ def triplet_loss(embedding, targets, margin, norm_feat, hard_mining):
 
     if margin > 0:
         loss = F.margin_ranking_loss(dist_an, dist_ap, y, margin=margin)
+        #print(dist_an.shape, dist_ap.shape, y.shape)
+        #print(loss)
     else:
         loss = F.soft_margin_loss(dist_an - dist_ap, y)
         # fmt: off
