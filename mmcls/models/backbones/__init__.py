@@ -1,6 +1,7 @@
 from .alexnet import AlexNet
 from .lenet import LeNet5
 from .mobilenet_v2 import MobileNetV2
+from .udf_mobilenetv2 import UDFMobileNetV2
 from .mobilenet_v3 import MobileNetv3
 from .regnet import RegNet
 from .resnest import ResNeSt
@@ -16,5 +17,5 @@ from .vgg import VGG
 __all__ = [
     'LeNet5', 'AlexNet', 'VGG', 'RegNet', 'ResNet', 'ResNeXt', 'ResNetV1d',
     'ResNeSt', 'ResNet_CIFAR', 'SEResNet', 'SEResNeXt', 'ShuffleNetV1',
-    'ShuffleNetV2', 'MobileNetV2', 'MobileNetv3'
+    'ShuffleNetV2', 'MobileNetV2', 'MobileNetv3', 'UDFMobileNetV2'
 ]
