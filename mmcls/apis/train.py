@@ -62,7 +62,8 @@ def train_model(model,
     data_loaders = [
         build_dataloader(
             ds,
-            cfg.data,
+            cfg.data.samples_per_gpu,
+            cfg.data.workers_per_gpu,
             # cfg.gpus will be ignored if distributed
             num_gpus=len(cfg.gpu_ids),
             dist=distributed,
@@ -131,7 +132,8 @@ def train_model(model,
         val_dataset = build_dataset(cfg.data.val, dict(test_mode=True))
         val_dataloader = build_dataloader(
             val_dataset,
-            cfg.data,
+            cfg.data.samples_per_gpu,
+            cfg.data.workers_per_gpu,
             dist=distributed,
             shuffle=False,
             round_up=True)

@@ -105,12 +105,17 @@ class Market1501(BaseDataset):
             self.samples = samples
 
             data_infos = []
+            min_pid = 1e10
+            max_pid = 0
             for filename, pid, cid in self.samples:
                 #print(filename, gt_label)
                 info = {'img_prefix': dir_prefix}
                 info['img_info'] = {'filename': filename}
                 info['gt_label'] = np.array(pid, dtype=np.int64)
                 data_infos.append(info)
+                min_pid = min(min_pid, pid)
+                max_pid = max(max_pid, pid)
+            #print('PID-STAT:', min_pid, max_pid)
             return data_infos
         else:
             dir_prefix = osp.join(self.data_prefix, 'bounding_box_test')
