@@ -138,7 +138,7 @@ def main():
             CLASSES=datasets[0].CLASSES)
     # add an attribute for visualization convenience
     validate = not args.no_validate
-    validate = False
+    #validate = False
     train_model(
         model,
         datasets,

@@ -131,13 +131,14 @@ class UDFMobileNetV2(BaseBackbone):
                  act_cfg=dict(type='ReLU6'),
                  norm_eval=False,
                  with_cp=False):
-        super(MobileNetV2, self).__init__()
+        super(UDFMobileNetV2, self).__init__()
         if arch_settings is None:
             arch_settings = [[1,32,1,2], [1, 16, 1, 1], [6, 24, 2, 2], [6, 32, 3, 2],
                              [6, 64, 4, 2], [6, 96, 3, 1], [6, 160, 3, 2],
                              [6, 320, 1, 1],
                              [1, 1280,1, 1]]
-        self.widen_factor = 1.0
+        widen_factor = 1.0
+        self.widen_factor = widen_factor
         assert len(arch_settings)>=6
         first_layer_cfg = arch_settings[0]
         assert first_layer_cfg[0]==1
@@ -169,7 +170,7 @@ class UDFMobileNetV2(BaseBackbone):
 
         self.layers = []
 
-        for i, layer_cfg in enumerate(self.arch_settings[1:-1]):
+        for i, layer_cfg in enumerate(arch_settings[1:-1]):
             expand_ratio, channel, num_blocks, stride = layer_cfg
             out_channels = make_divisible(channel * widen_factor, 8)
             inverted_res_layer = self.make_layer(
@@ -262,9 +263,10 @@ class UDFMobileNetV2(BaseBackbone):
                 param.requires_grad = False
 
     def train(self, mode=True):
-        super(MobileNetV2, self).train(mode)
+        super(UDFMobileNetV2, self).train(mode)
         self._freeze_stages()
         if mode and self.norm_eval:
             for m in self.modules():
                 if isinstance(m, _BatchNorm):
                     m.eval()
+
