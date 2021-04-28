@@ -7,6 +7,7 @@ import numpy as np
 
 from ..builder import PIPELINES
 from .compose import Compose
+import torchvision.transforms as T
 
 try:
     import albumentations
@@ -343,6 +344,21 @@ class RandomFlip(object):
     def __repr__(self):
         return self.__class__.__name__ + f'(flip_prob={self.flip_prob})'
 
+@PIPELINES.register_module()
+class RandomErasing(object):
+
+    def __init__(self, p=0.5, value=(0,0,0)):
+        self.p = p
+        self.value = value
+        self.handler = T.RandomErasing(p=p, value=value)
+
+    def __call__(self, results):
+        for key in results.get('img_fields', ['img']):
+            results[key] = self.handler(results[key])
+        return results
+
+    def __repr__(self):
+        return self.__class__.__name__ + f'(flip_prob={self.flip_prob})'
 
 @PIPELINES.register_module()
 class Resize(object):
