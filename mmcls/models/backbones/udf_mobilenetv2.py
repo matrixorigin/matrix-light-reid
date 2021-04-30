@@ -245,6 +245,7 @@ class UDFMobileNetV2(BaseBackbone):
             layer = getattr(self, layer_name)
             x = layer(x)
             if i in self.out_indices:
+                #print('out:', x.shape)
                 outs.append(x)
 
         if len(outs) == 1:
