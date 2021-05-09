@@ -17,11 +17,12 @@ policies = [
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='Resize', size=(256, 128)),
-	dict(type='AutoAugment', policies=policies),
-    dict(type='RandomCrop', size=(256,128), padding=(10,10)),
+	#dict(type='AutoAugment', policies=policies),
+    dict(type='RandomCrop', size=(256,128), padding=(10,10), pad_val=120),
     dict(type='RandomFlip', flip_prob=0.5, direction='horizontal'),
     dict(type='Normalize', **img_norm_cfg),
     dict(type='ImageToTensor', keys=['img']),
+    dict(type='RandomErasing', p=0.5, value=(123.675, 116.28, 103.53)),
     dict(type='ToTensor', keys=['gt_label']),
     dict(type='Collect', keys=['img', 'gt_label'])
 ]
@@ -34,7 +35,7 @@ test_pipeline = [
     dict(type='Collect', keys=['img'])
 ]
 data = dict(
-    samples_per_gpu=32,
+    samples_per_gpu=64,
     workers_per_gpu=2,
     #triplet_sampler=True,
     train=dict(
@@ -72,19 +73,23 @@ model = dict(
         num_classes=num_classes,
         #loss_ce=dict(type='CrossEntropyLoss', loss_weight=1.0),
         loss_ce=dict(type='LabelSmoothLoss', label_smooth_val=0.1, num_classes=num_classes, loss_weight=1.0),
-        loss_tri=dict(type='TripletLoss', loss_weight=2.0, margin=0.3, norm_feat=False),
+        loss_tri=dict(type='TripletLoss', loss_weight=1.0, margin=0.3, norm_feat=False),
         #loss_tri=None,
     ))
 
+#load_from = None
+#optimizer = dict(type='AdamW', lr=0.00035, weight_decay=0.01)
+#optimizer = dict(type='Adam', lr=0.00035)
 #optimizer = dict(type='SGD', lr=0.1, momentum=0.9, weight_decay=0.0001)
 #optimizer = dict(type='Adam', lr=0.0003, momentum=0.9, weight_decay=0.0005)
-optimizer = dict(type='SGD', lr=0.065, momentum=0.9, weight_decay=0.0005)
-lr_config = dict(policy='step', step=[150, 225, 300])
-runner = dict(type='EpochBasedRunner', max_epochs=350)
+#optimizer = dict(type='SGD', lr=0.065, momentum=0.9, weight_decay=0.0005)
+#lr_config = dict(policy='step', step=[150, 225, 300])
+#runner = dict(type='EpochBasedRunner', max_epochs=350)
 
-#optimizer = dict(type='Adam', lr=0.00035)
-#lr_config = dict(policy='step', step=[40, 70])
-#runner = dict(type='EpochBasedRunner', max_epochs=120)
+load_from = 'https://download.openmmlab.com/mmclassification/v0/resnet/resnet50_batch256_imagenet_20200708-cfb998bf.pth'
+optimizer = dict(type='Adam', lr=0.00035)
+lr_config = dict(policy='step', step=[60, 100])
+runner = dict(type='EpochBasedRunner', max_epochs=140)
 
 optimizer_config = dict(grad_clip=None)
 # checkpoint saving
@@ -100,7 +105,5 @@ log_config = dict(
 # yapf:enable
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-load_from = None
-#load_from = 'https://download.openmmlab.com/mmclassification/v0/resnet/resnet50_batch256_imagenet_20200708-cfb998bf.pth'
 resume_from = None
 workflow = [('train', 1)]
