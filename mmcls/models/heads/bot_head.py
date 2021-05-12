@@ -35,8 +35,10 @@ class BotHead(BaseHead):
 
         if bn_neck:
             self.bnneck = nn.BatchNorm1d(feat_dim)
-            nn.init.constant_(self.bnneck.weight, 1)
-            self.bnneck.weight.requires_grad = False
+            nn.init.constant_(self.bnneck.weight, 1.0)
+            nn.init.constant_(self.bnneck.bias, 0.0)
+            #self.bnneck.weight.requires_grad = False
+            self.bnneck.bias.requires_grad = False
             neck.append(self.bnneck)
 
         self.neck = nn.Sequential(*neck)
@@ -67,11 +69,6 @@ class BotHead(BaseHead):
         losses['loss_ce'] = self.loss_ce(logits, gt_label, avg_factor=num_samples)
         if self.loss_tri is not None:
             losses['loss_tri'] = self.loss_tri(feat, gt_label, avg_factor=num_samples)
-        # compute accuracy
-        #acc = self.compute_accuracy(cls_score, gt_label)
-        #assert len(acc) == len(self.topk)
-        #losses['loss'] = loss
-        #losses['accuracy'] = {f'top-{k}': a for k, a in zip(self.topk, acc)}
         return losses
 
     def forward_train(self, x, gt_label):
@@ -84,3 +81,4 @@ class BotHead(BaseHead):
         feat = feats[-1]
         feat = list(feat.detach().cpu().numpy())
         return feat
+

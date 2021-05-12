@@ -87,9 +87,16 @@ model = dict(
 #runner = dict(type='EpochBasedRunner', max_epochs=350)
 
 load_from = 'https://download.openmmlab.com/mmclassification/v0/resnet/resnet50_batch256_imagenet_20200708-cfb998bf.pth'
-optimizer = dict(type='Adam', lr=0.00035)
-lr_config = dict(policy='step', step=[60, 100])
-runner = dict(type='EpochBasedRunner', max_epochs=140)
+optimizer = dict(type='AdamW', lr=0.00035, weight_decay=0.0005)
+#lr_config = dict(policy='step', step=[60, 100])
+lr_config = dict(
+    policy='step',
+    warmup='linear',
+    warmup_iters=2000,
+    warmup_ratio=0.01,
+    #warmup_by_epoch=True,
+    step=[40, 90])
+runner = dict(type='EpochBasedRunner', max_epochs=120)
 
 optimizer_config = dict(grad_clip=None)
 # checkpoint saving
