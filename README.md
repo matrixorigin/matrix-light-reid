@@ -1,7 +1,9 @@
 
 ## Matrix Light ReID
 
-This ia a ReID training framework based on [mmcls](https://github.com/open-mmlab/mmclassification), which supports both ResNet family backbones and mobile level backbones.
+This is a Person-ReID training framework based on [mmcls](https://github.com/open-mmlab/mmclassification), which supports both ResNet family backbones and mobile level backbones, with modular design.
+
+We also support network searching to find best accuracy-latency tradeoff, for lightweight models.
 
 
 ## Performance
@@ -11,6 +13,8 @@ This ia a ReID training framework based on [mmcls](https://github.com/open-mmlab
 | ResNet50 | BagOfTricks | 85.53 | 93.91  |
 |          |             |       |        |
 |          |             |       |        |
+
+[more]
 
 ## Data Prepare
 
@@ -32,6 +36,7 @@ As default, the training process will evaluate the scores of mAP and Rank-1 ever
 
 ## Network Search for Lightweight backbones
 
+[todo]
 
 ## Reference
 
