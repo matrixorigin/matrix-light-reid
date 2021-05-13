@@ -46,12 +46,11 @@ Some code is inspired by [fastreid](https://github.com/JDAI-CV/fast-reid) and [g
 Ref-Papers:
 
 ```
-@misc{luo2019bag,
-      title={Bag of Tricks and A Strong Baseline for Deep Person Re-identification}, 
-      author={Hao Luo and Youzhi Gu and Xingyu Liao and Shenqi Lai and Wei Jiang},
-      year={2019},
-      eprint={1903.07071},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+@inproceedings{luo2019bag,
+  title={Bag of tricks and a strong baseline for deep person re-identification},
+  author={Luo, Hao and Gu, Youzhi and Liao, Xingyu and Lai, Shenqi and Jiang, Wei},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops},
+  pages={0--0},
+  year={2019}
 }
 ```
