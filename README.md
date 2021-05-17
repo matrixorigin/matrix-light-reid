@@ -1,7 +1,7 @@
 
-## Matrix Light ReID
+## Matrix Light ReID (MLR)
 
-This is a Person-ReID training framework based on [mmcls](https://github.com/open-mmlab/mmclassification), which supports both ResNet family backbones and mobile level backbones, with modular design.
+MLR is a Person-ReID training framework based on [mmcls](https://github.com/open-mmlab/mmclassification), which supports both ResNet family backbones and mobile level backbones, with modular design.
 
 We also support network searching to find best accuracy-latency tradeoff, for lightweight models.
 
