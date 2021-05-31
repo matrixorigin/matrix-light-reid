@@ -22,7 +22,8 @@ train_pipeline = [
     dict(type='RandomFlip', flip_prob=0.5, direction='horizontal'),
     dict(type='Normalize', **img_norm_cfg),
     dict(type='ImageToTensor', keys=['img']),
-    dict(type='RandomErasing', p=0.5, value=(123.675, 116.28, 103.53)),
+    #dict(type='RandomErasing', p=0.5, value=(123.675, 116.28, 103.53)),
+    dict(type='RandomErasing', p=0.5, value=0.0),
     dict(type='ToTensor', keys=['gt_label']),
     dict(type='Collect', keys=['img', 'gt_label'])
 ]
@@ -87,7 +88,7 @@ model = dict(
 #runner = dict(type='EpochBasedRunner', max_epochs=350)
 
 load_from = 'https://download.openmmlab.com/mmclassification/v0/resnet/resnet50_batch256_imagenet_20200708-cfb998bf.pth'
-optimizer = dict(type='AdamW', lr=0.00035, weight_decay=0.0005)
+optimizer = dict(type='Adam', lr=0.00035, weight_decay=0.0005)
 #lr_config = dict(policy='step', step=[60, 100])
 lr_config = dict(
     policy='step',
