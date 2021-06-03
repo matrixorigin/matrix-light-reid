@@ -8,10 +8,10 @@ We also support network searching to find best accuracy-latency tradeoff, for li
 
 ## Baseline Performance
 
-| Backbone | Head        | mAP   | Rank-1 |
-|----------|-------------|-------|--------|
-| ResNet50 | BagOfTricks | 85.53 | 93.91  |
-|          |             |       |        |
+| Backbone | Head        | mAP   | Rank-1 | FLOPs |
+|----------|-------------|-------|--------|-------|
+| ResNet50 | BagOfTricks | 85.53 | 93.91  | 4.08G |
+|          |             |       |        |       |
 
 
 [more]
