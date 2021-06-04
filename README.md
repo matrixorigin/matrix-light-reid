@@ -40,15 +40,16 @@ As for the name **Light** ReID, we try to find a lightweight solution to produce
 
 Here we use the MobileNetV2 as backbone and the same optimizer from ResNet50 baseline as our base solution. Our aim is to find a better backbone and training strategy to obtain good ReID mAP and Rank-1 accuracy, under the train-from-scratch situation.
 
-| Backbone    | Optimizer               | LR epoch steps  | mAP   | Rank-1 | FLOPs |
-| ----------- | ----------------------- | --------------- | ----- | ------ | ----- |
-| MobileNetV2 | Adam, wd 5e-4           | 50,120,150      | 46.96 | 71.17  | 210M  |
-| MobileNetV2 | SGD, wd 1e-4            | 50,120,150      | 47.70 | 71.61  | 210M  |
-| MobileNetV2 | SGD, wd 5e-4            | 50,120,150      | 61.62 | 81.32  | 210M  |
-| MLR-210M-A  | SGD, wd 5e-4            | 50,120,150      | 64.57 | 84.56  | 212M  |
-| MLR-210M-B  | SGD, wd 5e-4            | 50,120,150      | 65.23 | 83.88  | 207M  |
-| MLR-210M-A* | SGD, wd 5e-4, Warmup-2K | 150,250,320,350 |       |        | 212M  |
-| MLR-210M-B* | SGD, wd 5e-4, Warmup-2K | 150,250,320,350 |       |        | 207M  |
+| Backbone     | feat-dim | Optimizer               | LR epoch steps  | mAP       | Rank-1    | FLOPs |
+| ------------ | -------- | ----------------------- | --------------- | --------- | --------- | ----- |
+| MobileNetV2  | 256      | Adam, wd 5e-4           | 50,120,150      | 46.96     | 71.17     | 210M  |
+| MobileNetV2  | 256      | SGD, wd 1e-4            | 50,120,150      | 47.70     | 71.61     | 210M  |
+| MobileNetV2  | 256      | SGD, wd 5e-4            | 50,120,150      | 61.62     | 81.32     | 210M  |
+| MLR-210M-A   | 256      | SGD, wd 5e-4            | 50,120,150      | 64.57     | 84.56     | 212M  |
+| MLR-210M-B   | 256      | SGD, wd 5e-4            | 50,120,150      | 65.23     | 83.88     | 207M  |
+| MLR-210M-A+  | 256      | SGD, wd 5e-4, Warmup-2K | 150,250,320,350 | 69.18     | 86.13     | 212M  |
+| MLR-210M-B+  | 256      | SGD, wd 5e-4, Warmup-2K | 150,250,320,350 | **71.20** | **87.77** | 207M  |
+| MLR-210M-B++ | 512      | SGD, wd 5e-4, Warmup-2K | 150,250,320,350 | 71.19     | 87.35     | 207M  |
 
 ## Reference
 
